@@ -1,4 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Tianhui's Farewell Wall** — a community board where coworkers pin farewell notes for Tianhui. Built with [Next.js](https://nextjs.org) (App Router) and [Supabase](https://supabase.com) for persistence.
+
+## Supabase setup
+
+Notes are stored in Supabase, so the wall needs a project before it can save anything (until then it runs fine and just shows an empty board).
+
+1. Create a project at [supabase.com](https://supabase.com).
+2. In the dashboard, open **SQL Editor → New query**, paste the contents of [`supabase/schema.sql`](./supabase/schema.sql), and run it. This creates the `notes` table with Row Level Security allowing public read + insert (no edits/deletes).
+3. In **Settings → API**, copy the **Project URL** and the **anon / public** key into `.env.local`:
+
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
+
+4. Restart the dev server. The anon key is safe to expose — RLS limits it to reading and adding notes.
 
 ## Getting Started
 
@@ -17,8 +32,6 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 
