@@ -45,3 +45,43 @@ export async function addNote(
   revalidatePath("/");
   return { ok: true };
 }
+
+export async function addPhoto(
+  _prevState: AddNoteState,
+  formData: FormData,
+): Promise<AddNoteState> {
+  // The file itself is uploaded to Storage directly from the browser; this
+  // action only records the metadata row. Validate everything here.
+  const authorInput = String(formData.get("author") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const storagePath = String(formData.get("storage_path") ?? "").trim();
+
+  if (storagePath.length === 0) {
+    return { ok: false, error: "Something went wrong with the upload. Please try again." };
+  }
+  if (description.length > 500) {
+    return { ok: false, error: "That description is a bit too long (max 500 characters)." };
+  }
+
+  const author = authorInput.length > 0 ? authorInput.slice(0, 80) : "Anonymous";
+
+  if (!hasSupabaseEnv()) {
+    return { ok: false, error: "The gallery isn't connected to its database yet." };
+  }
+
+  try {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("photos")
+      .insert({ author, description, storage_path: storagePath });
+
+    if (error) {
+      return { ok: false, error: "Couldn't add your photo. Please try again." };
+    }
+  } catch {
+    return { ok: false, error: "Couldn't add your photo. Please try again." };
+  }
+
+  revalidatePath("/gallery");
+  return { ok: true };
+}

@@ -1,11 +1,11 @@
-**Tianhui's Farewell Wall** — a community board where coworkers pin farewell notes for Tianhui. Built with [Next.js](https://nextjs.org) (App Router) and [Supabase](https://supabase.com) for persistence.
+**Tianhui's Farewell Wall** — a community board where coworkers pin farewell notes (`/`) and share photos in a Memory Gallery (`/gallery`) for Tianhui. Built with [Next.js](https://nextjs.org) (App Router) and [Supabase](https://supabase.com) (Postgres + Storage) for persistence.
 
 ## Supabase setup
 
-Notes are stored in Supabase, so the wall needs a project before it can save anything (until then it runs fine and just shows an empty board).
+Notes and photos are stored in Supabase, so the app needs a project before it can save anything (until then it runs fine and just shows empty boards).
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. In the dashboard, open **SQL Editor → New query**, paste the contents of [`supabase/schema.sql`](./supabase/schema.sql), and run it. This creates the `notes` table with Row Level Security allowing public read + insert (no edits/deletes).
+2. In the dashboard, open **SQL Editor → New query**, paste the contents of [`supabase/schema.sql`](./supabase/schema.sql), and run it. This creates the `notes` and `photos` tables plus the public **`memories`** Storage bucket, all with Row Level Security allowing public read + insert (no edits/deletes). It's safe to re-run.
 3. In **Settings → API**, copy the **Project URL** and the **anon / public** key into `.env.local`:
 
    ```bash
@@ -13,7 +13,7 @@ Notes are stored in Supabase, so the wall needs a project before it can save any
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
    ```
 
-4. Restart the dev server. The anon key is safe to expose — RLS limits it to reading and adding notes.
+4. Restart the dev server. The anon key is safe to expose — RLS limits it to reading and adding notes/photos. Gallery images are served from the `memories` bucket's public URLs (the Supabase host is already allowlisted in `next.config.ts`).
 
 ## Getting Started
 
