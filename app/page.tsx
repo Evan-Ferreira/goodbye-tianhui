@@ -1,8 +1,9 @@
 import LeaveNote from './components/LeaveNote';
+import NoteCard from './components/NoteCard';
 import SiteHeader from './components/SiteHeader';
 import SiteFooter from './components/SiteFooter';
 import { createClient, hasSupabaseEnv } from './lib/supabase';
-import { NOTE_THEMES, isNoteColor, type Note } from './lib/notes';
+import { isNoteColor, type Note } from './lib/notes';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,38 +73,9 @@ export default async function Home() {
                             </div>
                         ) : (
                             <div className="max-w-[1200px] mx-auto columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
-                                {notes.map((note) => {
-                                    const theme = NOTE_THEMES[note.color];
-                                    return (
-                                        <div
-                                            key={note.id}
-                                            className={`break-inside-avoid group relative ${theme.card} p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:rotate-1 flex flex-col justify-between border-t-8 border-black/5`}
-                                        >
-                                            <span
-                                                className={`material-symbols-outlined absolute top-2 right-2 ${theme.pin}`}
-                                            >
-                                                push_pin
-                                            </span>
-                                            <div
-                                                className={`font-handwritten-note ${theme.text} text-handwritten-note mb-6 whitespace-pre-wrap break-words`}
-                                            >
-                                                {note.message}
-                                            </div>
-                                            <div
-                                                className={`flex items-center justify-between border-t ${theme.border} pt-4`}
-                                            >
-                                                <span
-                                                    className={`font-label-sm ${theme.author}`}
-                                                >
-                                                    — {note.author}
-                                                </span>
-                                                <span className="material-symbols-outlined text-primary text-[20px]">
-                                                    favorite
-                                                </span>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
+                                {notes.map((note) => (
+                                    <NoteCard key={note.id} note={note} />
+                                ))}
                             </div>
                         )}
                     </section>

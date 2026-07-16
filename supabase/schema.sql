@@ -32,6 +32,20 @@ create policy "Public can add notes" on public.notes
     and char_length(author) <= 80
   );
 
+drop policy if exists "Public can edit notes" on public.notes;
+create policy "Public can edit notes" on public.notes
+  for update to anon, authenticated
+  using (true)
+  with check (
+    char_length(message) between 1 and 1000
+    and char_length(author) <= 80
+  );
+
+drop policy if exists "Public can delete notes" on public.notes;
+create policy "Public can delete notes" on public.notes
+  for delete to anon, authenticated
+  using (true);
+
 -- ─────────────────────────────────────────────────────────────
 -- Memory Gallery: photos (metadata) + Storage bucket for the images
 -- ─────────────────────────────────────────────────────────────
@@ -59,6 +73,20 @@ create policy "Public can add photos" on public.photos
     and char_length(storage_path) > 0
   );
 
+drop policy if exists "Public can edit photos" on public.photos;
+create policy "Public can edit photos" on public.photos
+  for update to anon, authenticated
+  using (true)
+  with check (
+    char_length(author) <= 80
+    and char_length(description) <= 500
+  );
+
+drop policy if exists "Public can delete photos" on public.photos;
+create policy "Public can delete photos" on public.photos
+  for delete to anon, authenticated
+  using (true);
+
 -- Public bucket for uploaded images (images only, 10 MB max).
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('memories', 'memories', true, 10485760,
@@ -74,3 +102,8 @@ drop policy if exists "Public can upload memory photos" on storage.objects;
 create policy "Public can upload memory photos" on storage.objects
   for insert to anon, authenticated
   with check (bucket_id = 'memories');
+
+drop policy if exists "Public can delete memory photos" on storage.objects;
+create policy "Public can delete memory photos" on storage.objects
+  for delete to anon, authenticated
+  using (bucket_id = 'memories');

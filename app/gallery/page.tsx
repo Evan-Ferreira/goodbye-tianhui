@@ -1,5 +1,5 @@
-import Image from "next/image";
 import AddPhoto from "../components/AddPhoto";
+import PhotoCard from "../components/PhotoCard";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
 import { createClient, hasSupabaseEnv } from "../lib/supabase";
@@ -84,30 +84,11 @@ export default async function Gallery() {
             ) : (
               <div className="max-w-[1200px] mx-auto columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
                 {photos.map((photo, i) => (
-                  <div
+                  <PhotoCard
                     key={photo.id}
-                    className={`break-inside-avoid group relative bg-surface-container-highest p-4 shadow-lg hover:shadow-2xl transition-all ${
-                      ROTATIONS[i % ROTATIONS.length]
-                    } hover:rotate-0`}
-                  >
-                    <div className="relative aspect-square w-full mb-4 overflow-hidden bg-surface-dim">
-                      <Image
-                        src={photo.url}
-                        alt={photo.description || `Photo shared by ${photo.author}`}
-                        fill
-                        sizes="(min-width: 1280px) 260px, (min-width: 768px) 45vw, 90vw"
-                        className="object-cover sepia-[0.1] brightness-105 group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                    {photo.description ? (
-                      <div className="font-handwritten-note text-on-surface-variant text-center text-[16px] px-2 pb-1 break-words">
-                        {photo.description}
-                      </div>
-                    ) : null}
-                    <div className="font-label-sm text-on-surface-variant/60 text-center pb-2">
-                      — {photo.author}
-                    </div>
-                  </div>
+                    photo={photo}
+                    rotation={ROTATIONS[i % ROTATIONS.length]}
+                  />
                 ))}
               </div>
             )}
