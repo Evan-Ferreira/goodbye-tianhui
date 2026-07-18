@@ -39,11 +39,8 @@ export default async function Home() {
                 <div className="flex flex-col w-full min-h-screen">
                     {/* Header Area */}
                     <section className="relative px-4 md:px-16 mb-12">
-                        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-end justify-between gap-8 relative z-10">
+                        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-end justify-between gap-8 relative">
                             <div className="flex flex-col gap-2">
-                                <span className="font-label-sm text-primary uppercase tracking-[0.2em] mb-2 bg-primary-fixed px-3 py-1 self-start rounded-[0.75rem]">
-                                    Community Board
-                                </span>
                                 <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
                                     Goodbye &amp; Good Luck,{' '}
                                     <span className="text-primary underline decoration-dashed decoration-outline-variant underline-offset-8">
